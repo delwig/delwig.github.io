@@ -23,7 +23,7 @@
       margin-bottom: 5px;
       font-weight: bold;
     }
-    input, button {
+    input, select, button {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
@@ -52,6 +52,11 @@
     <input type="number" id="initialBalance" placeholder="Initial Balance" value="600" />
     <label for="days">Number of Days</label>
     <input type="number" id="days" placeholder="Number of Days" value="30" />
+    <label for="balanceCap">Balance Cap</label>
+    <select id="balanceCap">
+      <option value="3000">3000</option>
+      <option value="6000">6000</option>
+    </select>
     <button onclick="calculateGrowth()">Calculate</button>
     <ul id="results"></ul>
   </div>
@@ -60,6 +65,7 @@
     function calculateGrowth() {
       const initialBalance = parseFloat(document.getElementById('initialBalance').value);
       const days = parseInt(document.getElementById('days').value);
+      const balanceCap = parseFloat(document.getElementById('balanceCap').value);
       const fullTradePct = 0.04;
       const reducedTradePct = 0.02;
       const dailyReturnPct = 0.435;
@@ -68,7 +74,6 @@
       const results = [];
 
       for (let day = 1; day <= days; day++) {
-        // Use 2% trade rate on day 3 and 5 of each 7-day week
         const isReducedDay = (day % 7 === 3 || day % 7 === 5);
         const tradePct = isReducedDay ? reducedTradePct : fullTradePct;
 
@@ -76,7 +81,13 @@
         const profit = tradeAmount * dailyReturnPct;
         balance += profit;
 
-        results.push(`Day ${day}: Trade ${tradePct * 100}% | Balance = $${balance.toFixed(2)} | Profit = $${profit.toFixed(2)}`);
+        let capped = false;
+        if (balance > balanceCap) {
+          balance = balanceCap;
+          capped = true;
+        }
+
+        results.push(`Day ${day}: Trade ${tradePct * 100}% | Balance = $${balance.toFixed(2)} | Profit = $${profit.toFixed(2)}${capped ? ' (Cap reached)' : ''}`);
       }
 
       const resultsList = document.getElementById('results');
