@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profit Calculator</title>
+  <title>Futures Trading Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -47,7 +47,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Profit  Calculator</h1>
+    <h1>Futures Trading Calculator</h1>
     <label for="initialBalance">Initial Balance</label>
     <input type="number" id="initialBalance" placeholder="Initial Balance" value="600" />
     <label for="days">Number of Days</label>
@@ -60,17 +60,23 @@
     function calculateGrowth() {
       const initialBalance = parseFloat(document.getElementById('initialBalance').value);
       const days = parseInt(document.getElementById('days').value);
-      const dailyTradePct = 0.04;
+      const fullTradePct = 0.04;
+      const reducedTradePct = 0.02;
       const dailyReturnPct = 0.435;
 
       let balance = initialBalance;
       const results = [];
 
       for (let day = 1; day <= days; day++) {
-        const tradeAmount = balance * dailyTradePct;
+        // Use 2% trade rate on day 3 and 5 of each 7-day week
+        const isReducedDay = (day % 7 === 3 || day % 7 === 5);
+        const tradePct = isReducedDay ? reducedTradePct : fullTradePct;
+
+        const tradeAmount = balance * tradePct;
         const profit = tradeAmount * dailyReturnPct;
         balance += profit;
-        results.push(`Day ${day}: Balance = $${balance.toFixed(2)} | Profit = $${profit.toFixed(2)}`);
+
+        results.push(`Day ${day}: Trade ${tradePct * 100}% | Balance = $${balance.toFixed(2)} | Profit = $${profit.toFixed(2)}`);
       }
 
       const resultsList = document.getElementById('results');
