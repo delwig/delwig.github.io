@@ -74,7 +74,7 @@
       const results = [];
 
       for (let day = 1; day <= days; day++) {
-        const isReducedDay = (day % 7 === 3 || day % 7 === 5);
+        const isReducedDay = (day % 7 === 6 || day % 7 === 7);
         const tradePct = isReducedDay ? reducedTradePct : fullTradePct;
 
         const tradeAmount = balance * tradePct;
