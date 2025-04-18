@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profit Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    ul {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Profit  Calculator</h1>
+    <label for="initialBalance">Initial Balance</label>
+    <input type="number" id="initialBalance" placeholder="Initial Balance" value="600" />
+    <label for="days">Number of Days</label>
+    <input type="number" id="days" placeholder="Number of Days" value="30" />
+    <button onclick="calculateGrowth()">Calculate</button>
+    <ul id="results"></ul>
+  </div>
+
+  <script>
+    function calculateGrowth() {
+      const initialBalance = parseFloat(document.getElementById('initialBalance').value);
+      const days = parseInt(document.getElementById('days').value);
+      const dailyTradePct = 0.04;
+      const dailyReturnPct = 0.435;
+
+      let balance = initialBalance;
+      const results = [];
+
+      for (let day = 1; day <= days; day++) {
+        const tradeAmount = balance * dailyTradePct;
+        const profit = tradeAmount * dailyReturnPct;
+        balance += profit;
+        results.push(`Day ${day}: Balance = $${balance.toFixed(2)} | Profit = $${profit.toFixed(2)}`);
+      }
+
+      const resultsList = document.getElementById('results');
+      resultsList.innerHTML = '';
+      results.forEach(result => {
+        const li = document.createElement('li');
+        li.textContent = result;
+        resultsList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
