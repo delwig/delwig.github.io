@@ -72,8 +72,7 @@
       const initialBalance = parseFloat(document.getElementById('initialBalance').value);
       const days = parseInt(document.getElementById('days').value);
       const balanceCap = parseFloat(document.getElementById('balanceCap').value);
-      const fullTradePct = 0.04;
-      const reducedTradePct = 0.02;
+      const tradePct = 0.02;
       const dailyReturnPct = 0.435;
 
       let balance = initialBalance;
@@ -81,11 +80,23 @@
 
       for (let day = 1; day <= days; day++) {
         const isReducedDay = (day % 7 === 5 || day % 7 === 6);
-        const tradePct = isReducedDay ? reducedTradePct : fullTradePct;
+        let totalProfit = 0;
 
-        const tradeAmount = balance * tradePct;
-        const profit = tradeAmount * dailyReturnPct;
-        balance += profit;
+        if (isReducedDay) {
+          // Only one 2% trade
+          const tradeAmount = balance * tradePct;
+          const profit = tradeAmount * dailyReturnPct;
+          balance += profit;
+          totalProfit = profit;
+        } else {
+          // Two 2% trades
+          for (let i = 0; i < 2; i++) {
+            const tradeAmount = balance * tradePct;
+            const profit = tradeAmount * dailyReturnPct;
+            balance += profit;
+            totalProfit += profit;
+          }
+        }
 
         let capped = false;
         if (balance > balanceCap) {
@@ -93,7 +104,7 @@
           capped = true;
         }
 
-        results.push(`Day ${day}: Trade ${tradePct * 100}% | Balance = $${balance.toFixed(2)} | Profit = $${profit.toFixed(2)}${capped ? ' (Cap reached)' : ''}`);
+        results.push(`Day ${day}: ${isReducedDay ? 'One' : 'Two'} 2% Trade(s) | Balance = $${balance.toFixed(2)} | Profit = $${totalProfit.toFixed(2)}${capped ? ' (Cap reached)' : ''}`);
       }
 
       const resultsList = document.getElementById('results');
