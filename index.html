@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futures Trading Calculator</title>
+  <title>Trading Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,7 +73,7 @@
     <button onclick="calculateGrowth()">Calculate</button>
     <ul id="results"></ul>
     <p class="summary" id="summary"></p>
-    <p class="disclaimer"> Disclaimer: This only represents one side of the three party win-win mechanism. Also note This calculator is based on an average return of 43.5% per trade. Real world results may vary.</p>
+    <p class="disclaimer">Disclaimer: This only represents one side of the three party win-win mechanism. Also note This calculator is based on an average return of 43.5% per trade. Real world results may vary.</p>
   </div>
 
   <script>
@@ -87,6 +87,8 @@
       let balance = initialBalance;
       let totalTrades = 0;
       let totalTradeValue = 0;
+      let daysToMatchInitial = null;
+      let accumulatedTradeValue = 0;
       const results = [];
 
       for (let day = 1; day <= days; day++) {
@@ -101,6 +103,7 @@
           totalProfit = profit;
           totalTrades += 1;
           totalTradeValue += tradeAmount;
+          accumulatedTradeValue += tradeAmount;
           tradesToday = 1;
         } else {
           for (let i = 0; i < 2; i++) {
@@ -110,8 +113,13 @@
             totalProfit += profit;
             totalTrades += 1;
             totalTradeValue += tradeAmount;
+            accumulatedTradeValue += tradeAmount;
             tradesToday += 1;
           }
+        }
+
+        if (daysToMatchInitial === null && accumulatedTradeValue >= initialBalance) {
+          daysToMatchInitial = day;
         }
 
         let capped = false;
@@ -131,7 +139,8 @@
         resultsList.appendChild(li);
       });
 
-      document.getElementById('summary').textContent = `Total Trading Transactions: ${totalTrades} | Total Value of All Trades: $${totalTradeValue.toFixed(2)}`;
+      const matchInitialNote = daysToMatchInitial ? ` | Days to Match Initial Balance in Trade Value: ${daysToMatchInitial}` : '';
+      document.getElementById('summary').textContent = `Total Trading Transactions: ${totalTrades} | Total Value of All Trades: $${totalTradeValue.toFixed(2)}${matchInitialNote}`;
     }
   </script>
 </body>
