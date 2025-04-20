@@ -139,7 +139,7 @@
         resultsList.appendChild(li);
       });
 
-      const matchInitialNote = daysToMatchInitial ? ` | Days to Match Initial Balance in Trade Value: ${daysToMatchInitial}` : '';
+      const matchInitialNote = daysToMatchInitial ? ` | Days to Match Initial Balance in Trade Volume: ${daysToMatchInitial}` : '';
       document.getElementById('summary').textContent = `Total Trading Transactions: ${totalTrades} | Total Value of All Trades: $${totalTradeValue.toFixed(2)}${matchInitialNote}`;
     }
   </script>
