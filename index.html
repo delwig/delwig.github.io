@@ -52,10 +52,34 @@
       font-weight: bold;
       margin-top: 15px;
     }
+    .image-gallery img {
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    video {
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="image-gallery">
+      <img src="https://delwig.github.io/images/earn.jpeg" alt="Financial Earning Statement" />
+      <img src="https://delwig.github.io/images/recreward.jpeg" alt="Team Recommendation Benefit Award" />
+      <img src="https://delwig.github.io/images/rankreward.jpeg" alt="Rank Promotion Reward System" />
+      <img src="https://delwig.github.io/images/winwin.jpeg" alt="Three-Party Win-Win Mechanism" />
+      <img src="https://delwig.github.io/images/optdeposit.jpeg" alt="Optimus Invite Steps" />
+      <img src="https://delwig.github.io/images/bonchat.jpeg" alt="Bonchat Setup" />
+    </div>
+
+    <video controls>
+      <source src="https://delwig.github.io/images/deposit.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
     <h1>Trading Calculator</h1>
     <label for="initialBalance">Initial Balance</label>
     <select id="initialBalance">
@@ -95,6 +119,7 @@
         const isReducedDay = (day % 7 === 5 || day % 7 === 6);
         let totalProfit = 0;
         let tradesToday = 0;
+        let dailyTradeValues = [];
 
         if (isReducedDay) {
           const tradeAmount = balance * tradePct;
@@ -105,6 +130,7 @@
           totalTradeValue += tradeAmount;
           accumulatedTradeValue += tradeAmount;
           tradesToday = 1;
+          dailyTradeValues.push(tradeAmount);
         } else {
           for (let i = 0; i < 2; i++) {
             const tradeAmount = balance * tradePct;
@@ -115,6 +141,7 @@
             totalTradeValue += tradeAmount;
             accumulatedTradeValue += tradeAmount;
             tradesToday += 1;
+            dailyTradeValues.push(tradeAmount);
           }
         }
 
@@ -128,7 +155,7 @@
           capped = true;
         }
 
-        results.push(`Day ${day}: ${tradesToday} Trade(s) | Balance = $${balance.toFixed(2)} | Profit = $${totalProfit.toFixed(2)}${capped ? ' (Cap reached)' : ''}`);
+        results.push(`Day ${day}: ${tradesToday} Trade(s) | Balance = $${balance.toFixed(2)} | Profit = $${totalProfit.toFixed(2)}${capped ? ' (Cap reached)' : ''} | Trades: [${dailyTradeValues.map(v => '$' + v.toFixed(2)).join(', ')}]`);
       }
 
       const resultsList = document.getElementById('results');
