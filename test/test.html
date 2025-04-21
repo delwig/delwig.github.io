@@ -1,1 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Video Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    video {
+      width: 80%;
+      max-width: 720px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+    }
+    input[type="range"] {
+      cursor: pointer;
+    }
+    .volume-slider {
+      width: 150px;
+    }
+    .progress-bar {
+      width: 100%;
+      max-width: 720px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Custom Video Player</h1>
 
+  <video id="myVideo">
+    <source src="https://delwigj_p33494:lavupoli38@stream.myseedbox.site/private/Downloads/The.Last.of.Us.S02E02.4K.HDR.DV.2160p%20WEBDL%20Ita%20Eng%20x265-NAHOM/The.Last.of.Us.S02E02.4K.HDR.DV.2160p%20WEBDL%20Ita%20Eng%20x265-NAHOM.mkv" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Progress Bar -->
+  <input type="range" id="progressBar" class="progress-bar" value="0" min="0" step="0.1">
+
+  <!-- Controls -->
+  <div class="controls">
+    <button id="playPauseBtn">Play</button>
+    <label for="volumeSlider">Volume:</label>
+    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1">
+    <button id="fullscreenBtn">Fullscreen</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('myVideo');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const progressBar = document.getElementById('progressBar');
+
+    // Play/Pause toggle
+    playPauseBtn.addEventListener('click', () => {
+      if (video.paused || video.ended) {
+        video.play();
+        playPauseBtn.textContent = 'Pause';
+      } else {
+        video.pause();
+        playPauseBtn.textContent = 'Play';
+      }
+    });
+
+    // Update button when video ends
+    video.addEventListener('ended', () => {
+      playPauseBtn.textContent = 'Play';
+    });
+
+    // Volume control
+    volumeSlider.addEventListener('input', () => {
+      video.volume = volumeSlider.value;
+    });
+
+    // Fullscreen toggle
+    fullscreenBtn.addEventListener('click', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        video.requestFullscreen();
+      }
+    });
+
+    // Progress bar update
+    video.addEventListener('timeupdate', () => {
+      progressBar.value = video.currentTime;
+      progressBar.max = video.duration;
+    });
+
+    // Seek on progress bar change
+    progressBar.addEventListener('input', () => {
+      video.currentTime = progressBar.value;
+    });
+  </script>
+</body>
+</html>
