@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Selectable Media Player</title>
+  <title>Selectable Media Player2</title>
   <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
   <style>
     body {
@@ -35,7 +35,7 @@
     controls
     preload="auto"
     data-setup='{}'>
-    <source id="videoSource" src="" type="video/mp4/mkv" />
+    <source id="videoSource" src="" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
@@ -43,11 +43,13 @@
   <script>
     const player = videojs('my-video');
     const videoSelect = document.getElementById('videoSelect');
-    const sourceElement = document.getElementById('videoSource');
-    const baseURL = 'https://delwigj_p33494:lavupoli38@stream.myseedbox.site/private/Downloads/';
+    const baseURL = 'https://stream.myseedbox.site/private/Downloads/'; // remove auth
 
     fetch(baseURL + 'media-list.json')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        return res.json();
+      })
       .then(videos => {
         videos.forEach(video => {
           const option = document.createElement('option');
@@ -55,12 +57,9 @@
           option.textContent = video;
           videoSelect.appendChild(option);
         });
-
-        // Load the first video
-        if (videos.length) {
-          loadVideo(videos[0]);
-        }
-      });
+        if (videos.length) loadVideo(videos[0]);
+      })
+      .catch(err => console.error("Fetch error:", err));
 
     videoSelect.addEventListener('change', () => {
       loadVideo(videoSelect.value);
@@ -68,10 +67,15 @@
 
     function loadVideo(filename) {
       player.pause();
-      player.src({ type: 'video/mp4/mkv', src: baseURL + filename });
+      player.src({ type: 'video/mp4', src: baseURL + filename });
       player.load();
       player.play();
     }
+
+    player.on('error', () => {
+      const error = player.error();
+      console.error('Video.js error:', error);
+    });
   </script>
 
 </body>
