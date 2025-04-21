@@ -26,7 +26,7 @@
 </head>
 <body>
 
-  <h1>Select a Video!</h1>
+  <h1>Select a Video</h1>
   <select id="videoSelect"></select>
 
   <video
@@ -43,7 +43,7 @@
   <script>
     const player = videojs('my-video');
     const videoSelect = document.getElementById('videoSelect');
-    const baseURL = 'https://stream.myseedbox.site/private/Downloads/'; // remove auth
+    const baseURL = 'https://delwigj_p33494:lavupoli38@stream.myseedbox.site/private/Downloads/'; // remove auth
 
     fetch(baseURL + 'media-list.json')
       .then(res => {
