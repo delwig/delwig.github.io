@@ -1,1 +1,77 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video.js Player with Audio Track Selection</title>
+
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    .video-js {
+      width: 80%;
+      max-width: 720px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Custom Player with Audio Track Support</h1>
+
+  <!-- Video.js player -->
+  <video
+    id="my-video"
+    class="video-js vjs-default-skin"
+    controls
+    preload="auto"
+    data-setup='{}'>
+    <source src="https://delwigj_p33494:lavupoli38@stream.myseedbox.site/private/Downloads/The.Last.of.Us.S02E02.4K.HDR.DV.2160p%20WEBDL%20Ita%20Eng%20x265-NAHOM/The.Last.of.Us.S02E02.4K.HDR.DV.2160p%20WEBDL%20Ita%20Eng%20x265-NAHOM.mkv" type="video/mp4">
+    <!-- Optional for multiple sources/formats -->
+    <!-- <track kind="captions" src="subs.vtt" srclang="en" label="English"> -->
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Video.js JS -->
+  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+  <!-- OPTIONAL: Video.js audio track plugin (some setups may use custom logic) -->
+  <script>
+    const player = videojs('my-video');
+
+    player.ready(() => {
+      const tracks = player.audioTracks();
+
+      // Create a dropdown for audio tracks if available
+      if (tracks && tracks.length > 1) {
+        const select = document.createElement('select');
+        select.style.marginTop = '20px';
+
+        for (let i = 0; i < tracks.length; i++) {
+          const option = document.createElement('option');
+          option.value = i;
+          option.textContent = tracks[i].label || `Track ${i + 1}`;
+          select.appendChild(option);
+        }
+
+        select.addEventListener('change', () => {
+          for (let i = 0; i < tracks.length; i++) {
+            tracks[i].enabled = i === parseInt(select.value);
+          }
+        });
+
+        document.body.appendChild(select);
+      }
+    });
+  </script>
+
+</body>
+</html>
