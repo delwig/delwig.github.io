@@ -35,7 +35,7 @@
     controls
     preload="auto"
     data-setup='{}'>
-    <source id="videoSource" src="" type="video/mp4" />
+    <source id="videoSource" src="" type="video/mp4/mkv" />
     Your browser does not support the video tag.
   </video>
 
@@ -68,7 +68,7 @@
 
     function loadVideo(filename) {
       player.pause();
-      player.src({ type: 'video/mp4', src: baseURL + filename });
+      player.src({ type: 'video/mp4/mkv', src: baseURL + filename });
       player.load();
       player.play();
     }
