@@ -75,8 +75,9 @@
       <img src="https://delwig.github.io/images/winwin.jpeg" alt="Three-Party Win-Win Mechanism" />
       <img src="https://delwig.github.io/images/optdeposit.jpeg" alt="Optimus Invite Steps" />
       <img src="https://delwig.github.io/images/Opt.jpg" alt="Optimus Istall" />
-      
     </div>
+
+    <embed src="https://delwig.github.io/images/plan.pdf" type="application/pdf" width="100%" height="500px" />
 
     <video controls>
       <source src="https://delwig.github.io/images/deposit.mp4" type="video/mp4">
@@ -87,8 +88,6 @@
       <source src="https://delwig.github.io/images/withdraw.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-
-    <!-- <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://delwig.github.io/images/aplex.pptx" width="100%" height="500px" frameborder="0"></iframe> -->
 
     <h1>Trading Calculator</h1>
     <label for="initialBalance">Initial Balance</label>
@@ -111,6 +110,12 @@
     </select>
     <input type="number" id="customBalanceCap" placeholder="Enter Custom Balance Cap" style="display: none;" />
 
+    <label for="tradePattern">Trading Pattern</label>
+    <select id="tradePattern">
+      <option value="default">2 trades/day (Mon-Fri), 1 trade/day (Sat-Sun)</option>
+      <option value="custom">3 trades/day (Mon-Fri), 2 trades/day (Sat-Sun)</option>
+    </select>
+
     <button onclick="calculateGrowth()">Calculate</button>
     <ul id="results"></ul>
     <p class="summary" id="summary"></p>
@@ -129,6 +134,7 @@
     function calculateGrowth() {
       const initialBalanceValue = document.getElementById('initialBalance').value;
       const balanceCapValue = document.getElementById('balanceCap').value;
+      const pattern = document.getElementById('tradePattern').value;
       const initialBalance = initialBalanceValue === 'custom' ? parseFloat(document.getElementById('customInitialBalance').value) : parseFloat(initialBalanceValue);
       const balanceCap = balanceCapValue === 'custom' ? parseFloat(document.getElementById('customBalanceCap').value) : parseFloat(balanceCapValue);
       const days = parseInt(document.getElementById('days').value);
@@ -143,33 +149,27 @@
       const results = [];
 
       for (let day = 1; day <= days; day++) {
-        const isReducedDay = (day % 7 === 5 || day % 7 === 6);
-        let totalProfit = 0;
+        const dayOfWeek = day % 7;
         let tradesToday = 0;
+
+        if (pattern === 'custom') {
+          tradesToday = (dayOfWeek >= 5) ? 2 : 3;
+        } else {
+          tradesToday = (dayOfWeek >= 5) ? 1 : 2;
+        }
+
+        let totalProfit = 0;
         let dailyTradeValues = [];
 
-        if (isReducedDay) {
+        for (let i = 0; i < tradesToday; i++) {
           const tradeAmount = balance * tradePct;
           const profit = tradeAmount * dailyReturnPct;
           balance += profit;
-          totalProfit = profit;
+          totalProfit += profit;
           totalTrades += 1;
           totalTradeValue += tradeAmount;
           accumulatedTradeValue += tradeAmount;
-          tradesToday = 1;
           dailyTradeValues.push(tradeAmount);
-        } else {
-          for (let i = 0; i < 2; i++) {
-            const tradeAmount = balance * tradePct;
-            const profit = tradeAmount * dailyReturnPct;
-            balance += profit;
-            totalProfit += profit;
-            totalTrades += 1;
-            totalTradeValue += tradeAmount;
-            accumulatedTradeValue += tradeAmount;
-            tradesToday += 1;
-            dailyTradeValues.push(tradeAmount);
-          }
         }
 
         if (daysToMatchInitial === null && accumulatedTradeValue >= initialBalance) {
