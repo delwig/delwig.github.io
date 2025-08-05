@@ -101,6 +101,7 @@
 
     <label for="balanceCap">Balance Cap</label>
     <select id="balanceCap">
+      <option value="1500">1500</option>
       <option value="3000">3000</option>
       <option value="6000">6000</option>
       <option value="custom">Custom</option>
@@ -136,7 +137,7 @@
       const balanceCap = balanceCapValue === 'custom' ? parseFloat(document.getElementById('customBalanceCap').value) : parseFloat(balanceCapValue);
       const days = parseInt(document.getElementById('days').value);
       const tradePct = 0.02;
-      const dailyReturnPct = 0.30;
+      const dailyReturnPct = 0.225;
 
       let balance = initialBalance;
       let totalTrades = 0;
